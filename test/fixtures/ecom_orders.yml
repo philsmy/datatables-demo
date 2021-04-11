@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  price: 1.5
+  item_sku: MyString
+  purchase_date: 2021-04-11 10:39:44
+  platform_order_num: MyString
+  sales_channel: MyString
+  status: MyString
+  customer_name: MyString
+  customer_state: MyString
+  shipped_at: 2021-04-11 10:39:44
+  num_items_shipped: 1
+  payment_method: MyString
+
+two:
+  price: 1.5
+  item_sku: MyString
+  purchase_date: 2021-04-11 10:39:44
+  platform_order_num: MyString
+  sales_channel: MyString
+  status: MyString
+  customer_name: MyString
+  customer_state: MyString
+  shipped_at: 2021-04-11 10:39:44
+  num_items_shipped: 1
+  payment_method: MyString

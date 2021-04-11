@@ -1,0 +1,72 @@
+<%= form_with(model: ecom_order, local: true) do |form| %>
+  <% if ecom_order.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(ecom_order.errors.count, "error") %> prohibited this ecom_order from being saved:</h2>
+
+      <ul>
+      <% ecom_order.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :price %>
+    <%= form.text_field :price %>
+  </div>
+
+  <div class="field">
+    <%= form.label :item_sku %>
+    <%= form.text_field :item_sku %>
+  </div>
+
+  <div class="field">
+    <%= form.label :purchase_date %>
+    <%= form.datetime_select :purchase_date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :platform_order_num %>
+    <%= form.text_field :platform_order_num %>
+  </div>
+
+  <div class="field">
+    <%= form.label :sales_channel %>
+    <%= form.text_field :sales_channel %>
+  </div>
+
+  <div class="field">
+    <%= form.label :status %>
+    <%= form.text_field :status %>
+  </div>
+
+  <div class="field">
+    <%= form.label :customer_name %>
+    <%= form.text_field :customer_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :customer_state %>
+    <%= form.text_field :customer_state %>
+  </div>
+
+  <div class="field">
+    <%= form.label :shipped_at %>
+    <%= form.datetime_select :shipped_at %>
+  </div>
+
+  <div class="field">
+    <%= form.label :num_items_shipped %>
+    <%= form.number_field :num_items_shipped %>
+  </div>
+
+  <div class="field">
+    <%= form.label :payment_method %>
+    <%= form.text_field :payment_method %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

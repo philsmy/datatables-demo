@@ -1,0 +1,2 @@
+class EcomOrder < ApplicationRecord
+end

@@ -1,0 +1,124 @@
+<link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
+
+<p id="notice"><%= notice %></p>
+
+<h1>Ecom Orders</h1>
+
+<table id='ordersTable' class='table table-striped table-sm'>
+  <thead>
+    <tr>
+      <th>
+        <div class='btn-group'>
+          <button type='button' class='btn btn-light btn-sm'><span id='selectAll'><i class="far fa-square"></i></span></button>
+ 					<button type="button" class="btn btn-light btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<span class="sr-only">Toggle Dropdown</span>
+					</button>
+					<div class="dropdown-menu">
+            <a id='numSelectedText' class='dropdown-item' href='#'>(0) Orders Selected</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item bulkActionLink" href="#" data-action='refund'>Refund</a>
+						<a class="dropdown-item bulkActionLink" href="#" data-action='email'>Send Email</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item bulkActionLink" href="#" data-action='question'>Question Sanity</a>
+						<a class="dropdown-item bulkActionLink" href="#" data-action='stalk'>Stalk online</a>
+          </div>
+        </div>
+      </th>
+      <th></th>
+      <th>Purchase date</th>
+      <th>Purchase</th>
+      <th>Price</th>
+      <th>Status</th>
+      <th>Customer</th>
+      <th>Shipped at</th>
+      <th>Num items shipped</th>
+      <th>Payment method</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @ecom_orders.each do |ecom_order| %>
+      <tr>
+        <td><%= ecom_order.id %></td>
+        <td><%= sales_channel_icon(ecom_order) %></td>
+        <td><%= local_time ecom_order.purchase_date, '%B %e, %Y %l:%M%P %Z' %></td>
+        <td><%= ecom_order.platform_order_num %><br/>
+        <strong>SKU: </strong><%= link_to ecom_order.item_sku, "#" %>
+        </td>
+        <td><%= ecom_order.price %></td>
+        <td><%= order_status_icon(ecom_order) %></td>
+        <td><%= ecom_order.customer_name %><br/>
+            <%= ecom_order.customer_state %></td>
+        <td><%= local_time(ecom_order.shipped_at, '%B %e, %Y %l:%M%P %Z') if ecom_order.shipped_at %></td>
+        <td><%= ecom_order.num_items_shipped %></td>
+        <td><%= ecom_order.payment_method %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= simple_form_for(EcomOrder.new, url: bulk_actions_ecom_orders_path, html: { id: 'bulkActionsForm', class: 'mt-4 border-top pt-2'}) do |f| %>
+<input type="hidden" id="formActionType" name="action_type" value="">
+<% end %>
+
+<script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    var oTable = $("#ordersTable").DataTable({
+      order: [[2, 'desc']],
+      columnDefs: [
+        {
+          targets: 0,
+          checkboxes: {
+            selectRow: true,
+            selectAll: false
+          }
+        }
+      ],
+      select: {
+        style: 'multi'
+      }
+    });
+
+  		$('#selectAll').on('click', function(params) {
+			var rows_selected = oTable.column(0).checkboxes.selected();
+			
+			if (rows_selected.length == oTable.page.len()) {
+				oTable.column(0).checkboxes.select(false);
+			} else {
+				oTable.column(0).checkboxes.select(true);
+			}
+		})
+
+ 		$('.bulkActionLink').on('click', function(params) {
+			// console.log(this.dataset.action)
+			var rows_selected = oTable.column(0).checkboxes.selected();
+
+			if (rows_selected.length > 0) {
+				$("#formActionType").val(this.dataset.action);
+				$("#bulkActionsForm").submit();
+			}
+		})
+
+	// do something with all selected rows
+		$('#bulkActionsForm').on('submit', function(e){
+			var form = this;
+
+			var rows_selected = oTable.column(0).checkboxes.selected();
+
+			// Iterate over all selected checkboxes
+			$.each(rows_selected, function(index, rowId){
+				// Create a hidden element
+				$(form).append(
+					$('<input>')
+					.attr('type', 'hidden')
+					.attr('name', 'id[]')
+					.val(rowId)
+				);
+			});
+		});
+
+
+  });
+</script>
